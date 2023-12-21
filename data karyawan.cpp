@@ -7,18 +7,19 @@ using namespace std;
 
 // Bagian struct
 struct karyawan {
-    int nip; // Array
+    int nip; 
     string namakrywn, tlpon, jbtn, agm, tgl;
 };
 
+// Bagian struct
 struct tunggu {
-    int nip; // Array
+    int nip; 
     string namakrywn, tlpon, jbtn, agm, tgl;
 };
 
 // Bagian Stack
 struct stack {
-    int top; // Array
+    int top; 
     struct karyawan krywn[max];
     struct tunggu temp[max];
 } S;
@@ -42,7 +43,7 @@ int isFull() {
     }
 }
 
-// Bagian Antrian
+// Bagian Struct & Queue
 struct queue {
     int front, rear;
     struct karyawan krywn[max];
