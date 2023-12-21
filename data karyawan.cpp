@@ -101,8 +101,8 @@ bool isExistInQueue(int nip) {
     return false;
 }
 
-// Masukan Data Karyawan Lama
-void masukindata(int nip, string tgl, string agm, string namakrywn, string tlpon, string jbtn) {
+// Masukan Data Karyawan Baru
+void masukindatakaryawanbaru(int nip, string tgl, string agm, string namakrywn, string tlpon, string jbtn) {
     if (isEmpty() == 1) {
         S.top++;
         activeKaryawan = &S.krywn[S.top]; // Set pointer ke data karyawan
@@ -250,7 +250,7 @@ void tambahDataKaryawanlama(int nip, string tanggal_lahir, string agama, string 
 }
 
 // Tampilkan Data Karyawan Lama
-void tampilkanDataAntrian() {
+void tampilkanDataKaryawanlama() {
     if (isQueueEmpty()) {
         cout << "DATA KARYAWAN MASIH KOSONG" << endl;
     } else {
@@ -304,7 +304,7 @@ int main() {
                 cin >> agm;
                 cout << "Masukan Jabatan \t= ";
                 cin >> jbtn;
-                masukindata(nip, tgl, agm, namakrywn, tlpon, jbtn);
+                masukindatakaryawanbaru(nip, tgl, agm, namakrywn, tlpon, jbtn);
                 break;
 
             case '2':
@@ -345,7 +345,7 @@ int main() {
                 break;
 
             case '5':
-                tampilkanDataAntrian();
+                tampilkanDataKaryawanlama();
                 break;
 
             case '6':
