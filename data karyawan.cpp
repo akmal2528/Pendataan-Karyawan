@@ -63,7 +63,7 @@ int isQueueFull() {
 
 void enqueue(struct karyawan data) {
     if (isQueueFull()) {
-        cout << "ANTRIAN SUDAH PENUH" << endl;
+        cout << "DATA SUDAH PENUH" << endl;
     } else {
         if (isQueueEmpty()) {
             Q.front = Q.rear = 0;
@@ -77,7 +77,7 @@ void enqueue(struct karyawan data) {
 struct karyawan dequeue() {
     struct karyawan data;
     if (isQueueEmpty()) {
-        cout << "ANTRIAN KOSONG" << endl;
+        cout << "DATA KOSONG" << endl;
         return data;
     } else {
         data = Q.krywn[Q.front];
@@ -349,7 +349,7 @@ int main() {
 
             case '6':
                 cout << "\n\tTERIMA KASIH" << endl;
-                cout << "\n\tPROGRAM EXIT" << endl;
+                cout << "\n\tPROGRAM EXIT" << endl;  
                 ulang = 0;
                 break;
         }
