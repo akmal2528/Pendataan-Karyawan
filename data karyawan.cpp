@@ -208,7 +208,7 @@ void tampil() {
     }
 }
 
-// Bagian Pencarian Data karyawan Baru
+// Bagian Pencarian Data karyawan Baru	
 int cariByNIP(int nip) {
     for (int i = 1; i <= S.top; i++) {
         if (S.krywn[i].nip == nip) {
@@ -219,7 +219,7 @@ int cariByNIP(int nip) {
 }
 
 // Tambah Data Karyawan Lama
-void tambahDataAntrian(int nip, string tanggal_lahir, string agama, string namakaryawan, string telepon, string jabatan) {
+void tambahDataKaryawanlama(int nip, string tanggal_lahir, string agama, string namakaryawan, string telepon, string jabatan) {
     // Periksa apakah karyawan sudah ada 
     if (isExistInQueue(nip)) {
         cout << "DATA KARYAWAN SUDAH ADA\n";
@@ -341,7 +341,7 @@ int main() {
                 cin >> agm;
                 cout << "Masukan Jabatan \t= ";
                 cin >> jbtn;
-                tambahDataAntrian(nip, tgl, agm, namakrywn, tlpon, jbtn);
+                tambahDataKaryawanlama(nip, tgl, agm, namakrywn, tlpon, jbtn);
                 break;
 
             case '5':
