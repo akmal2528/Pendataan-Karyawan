@@ -7,46 +7,20 @@ using namespace std;
 
 // Bagian struct
 struct karyawan {
-    int nip; 
-    string namakrywn, tlpon, jbtn, agm, tgl;
-};
-
-// Bagian struct
-struct tunggu {
-    int nip; 
+    int nip;
     string namakrywn, tlpon, jbtn, agm, tgl;
 };
 
 // Bagian Stack
 struct stack {
-    int top; 
+    int top;
     struct karyawan krywn[max];
-    struct tunggu temp[max];
 } S;
-
-// Pointer ke data karyawan yang aktif di stack
-struct karyawan* activeKaryawan = NULL;
-
-int isEmpty() {
-    if (S.top == 0) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-int isFull() {
-    if (S.top == max - 1) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
 
 // Bagian Struct & Queue
 struct queue {
     int front, rear;
-    struct karyawan krywn[max];
+    struct karyawan baru[max];
 } Q;
 
 void initQueue() {
@@ -71,7 +45,7 @@ void enqueue(struct karyawan data) {
         } else {
             Q.rear++;
         }
-        Q.krywn[Q.rear] = data;
+        Q.baru[Q.rear] = data;
     }
 }
 
@@ -81,7 +55,7 @@ struct karyawan dequeue() {
         cout << "DATA KOSONG" << endl;
         return data;
     } else {
-        data = Q.krywn[Q.front];
+        data = Q.baru[Q.front];
         if (Q.front == Q.rear) {
             initQueue();
         } else {
@@ -91,84 +65,46 @@ struct karyawan dequeue() {
     }
 }
 
-// Fungsi untuk memeriksa apakah karyawan dengan NIP tertentu sudah ada di dalam antrian
-bool isExistInQueue(int nip) {
-    for (int i = Q.front; i <= Q.rear; i++) {
-        if (Q.krywn[i].nip == nip) {
-            return true;
-        }
-    }
-    return false;
+int isEmpty() {
+    return (S.top == 0);
+}
+
+int isFull() {
+    return (S.top == max - 1);
 }
 
 // Masukan Data Karyawan Baru
 void masukindatakaryawanbaru(int nip, string tgl, string agm, string namakrywn, string tlpon, string jbtn) {
-    if (isEmpty() == 1) {
+    if (isEmpty() || !isFull()) {
         S.top++;
-        activeKaryawan = &S.krywn[S.top]; // Set pointer ke data karyawan
-        activeKaryawan->nip = nip;
-        activeKaryawan->namakrywn = namakrywn;
-        activeKaryawan->tgl = tgl;
-        activeKaryawan->tlpon = tlpon;
-        activeKaryawan->agm = agm;
-        activeKaryawan->jbtn = jbtn;
+        S.krywn[S.top].nip = nip;
+        S.krywn[S.top].namakrywn = namakrywn;
+        S.krywn[S.top].tgl = tgl;
+        S.krywn[S.top].tlpon = tlpon;
+        S.krywn[S.top].agm = agm;
+        S.krywn[S.top].jbtn = jbtn;
         cout << "DATA KARYAWAN BERHASIL DITAMBAH\n";
         cout << endl;
-    } else if (isFull() == 0) {
-        S.top++;
-        activeKaryawan = &S.krywn[S.top]; // Set pointer ke data karyawan
-        activeKaryawan->nip = nip;
-        activeKaryawan->namakrywn = namakrywn;
-        activeKaryawan->tgl = tgl;
-        activeKaryawan->tlpon = tlpon;
-        activeKaryawan->agm = agm;
-        activeKaryawan->jbtn = jbtn;
-        cout << "DATA KARYAWAN TELAH TERDAFTAR\n";
-        cout << endl;
     } else {
-        cout << "STACK TELAH PENUH";
+        cout << "STACK TELAH PENUH" << endl;
         cout << endl;
     }
-}	
+}
 
 // Bagian Sorting
 void sorting() {
-    int jmax;
-    int u = S.top;
-    for (int j = 0; j < S.top; j++) {
-        jmax = 0;
-        for (int k = 1; k <= u; k++) {
-            if (S.krywn[k].nip > S.krywn[jmax].nip) {
-                jmax = k;
+    for (int i = 1; i <= S.top; i++) {
+        for (int j = i + 1; j <= S.top; j++) {
+            if (S.krywn[j].nip > S.krywn[i].nip) {
+                swap(S.krywn[j], S.krywn[i]);
             }
         }
-        S.temp[j].nip = S.krywn[u].nip;
-        S.temp[j].namakrywn = S.krywn[u].namakrywn;
-        S.temp[j].tgl = S.krywn[u].tgl;
-        S.temp[j].tlpon = S.krywn[u].tlpon;
-        S.temp[j].agm = S.krywn[u].agm;
-        S.temp[j].jbtn = S.krywn[u].jbtn;
-
-        S.krywn[u].nip = S.krywn[jmax].nip;
-        S.krywn[u].namakrywn = S.krywn[jmax].namakrywn;
-        S.krywn[u].tgl = S.krywn[jmax].tgl;
-        S.krywn[u].tlpon = S.krywn[jmax].tlpon;
-        S.krywn[u].agm = S.krywn[jmax].agm;
-        S.krywn[u].jbtn = S.krywn[jmax].jbtn;
-
-        S.krywn[jmax].nip = S.temp[j].nip;
-        S.krywn[jmax].namakrywn = S.temp[j].namakrywn;
-        S.krywn[jmax].tgl = S.temp[j].tgl;
-        S.krywn[jmax].tlpon = S.temp[j].tlpon;
-        S.krywn[jmax].agm = S.temp[j].agm;
-        S.krywn[jmax].jbtn = S.temp[j].jbtn;
-        u--;
     }
 }
 
 // Lihat Daftar Karyawan Baru
 void tampil() {
-    if (isEmpty() == 0) {
+    if (!isEmpty()) {
         sorting();
         cout << "\n";
         cout << "===================================================================" << endl;
@@ -208,7 +144,7 @@ void tampil() {
     }
 }
 
-// Bagian Pencarian Data karyawan Baru	
+// Bagian Pencarian Data karyawan Baru
 int cariByNIP(int nip) {
     for (int i = 1; i <= S.top; i++) {
         if (S.krywn[i].nip == nip) {
@@ -220,19 +156,6 @@ int cariByNIP(int nip) {
 
 // Tambah Data Karyawan Lama
 void tambahDataKaryawanlama(int nip, string tanggal_lahir, string agama, string namakaryawan, string telepon, string jabatan) {
-    // Periksa apakah karyawan sudah ada 
-    if (isExistInQueue(nip)) {
-        cout << "DATA KARYAWAN SUDAH ADA\n";
-        return;
-    }
-
-    // Periksa apakah karyawan sudah ada di stack
-    int index = cariByNIP(nip);
-    if (index != -1) {
-        cout << "DATA KARYAWAN SUDAH ADA DI STACK\n";
-        return;
-    }
-
     struct karyawan data;
     data.nip = nip;
     data.namakrywn = namakaryawan;
@@ -241,30 +164,50 @@ void tambahDataKaryawanlama(int nip, string tanggal_lahir, string agama, string 
     data.agm = agama;
     data.jbtn = jabatan;
 
-    if (isQueueFull()) {
-        cout << "DATA SUDAH PENUH" << endl;
-    } else {
-        enqueue(data); // Menambahkan data baru ke antrian
+    if (!isQueueFull()) {
+        enqueue(data); // Menambahkan data baru ke antrian tunggu
         cout << "DATA KARYAWAN TELAH DITAMBAHKAN\n";
+    } else {
+        cout << "DATA SUDAH PENUH" << endl;
     }
 }
 
 // Tampilkan Data Karyawan Lama
 void tampilkanDataKaryawanlama() {
-    if (isQueueEmpty()) {
-        cout << "DATA KARYAWAN MASIH KOSONG" << endl;
-    } else {
+    if (!isQueueEmpty()) {
         cout << "\nDaftar Karyawan Lama Amikom:\n";
         while (!isQueueEmpty()) {
             struct karyawan data = dequeue();
             cout << "NIP: " << data.nip << ", Nama: " << data.namakrywn << endl;
         }
         cout << endl;
+    } else {
+        cout << "DATA KARYAWAN MASIH KOSONG" << endl;
+    }
+}
+
+//Hapus Data Karyawan
+void hapusDataKaryawan(int nip) {
+    int index = cariByNIP(nip);
+    if (index != -1) {
+        // Geser data ke atas untuk menutup celah
+        for (int i = index; i < S.top; i++) {
+            S.krywn[i] = S.krywn[i + 1];
+        }
+        S.top--;
+
+        cout << "DATA KARYAWAN BERHASIL DIHAPUS\n";
+
+        // Tambahkan data ke dalam antrian tunggu
+        struct karyawan data = dequeue();
+        enqueue(data);
+    } else {
+        cout << "DATA TIDAK DITEMUKAN\n";
     }
 }
 
 void menu() {
-	cout << endl;
+    cout << endl;
     cout << "||                PILIHAN MENU DIBAWAH INI                   ||\n";
     cout << "||                                                           ||\n";
     cout << "|| 1. Masukan Data Karyawan Baru Amikom Yogyakarta           ||\n";
@@ -272,13 +215,14 @@ void menu() {
     cout << "|| 3. Cari Data Karyawan Baru Amikom Yogyakarta              ||\n";
     cout << "|| 4. Masukkan Data Karyawan Lama                            ||\n";
     cout << "|| 5. Tampilkan Data Karyawan Lama                           ||\n";
-    cout << "|| 6. Exit                                                   ||\n";
+    cout << "|| 6. Hapus Data Karyawan Amikom Yogyakarta                  ||\n";
+    cout << "|| 7. Exit                                                   ||\n";
     cout << endl;
 }
 
 int main() {
-    initQueue();  // Inisialisasi antrian
-    S.top = 0;    // Inisialisasi stack
+    initQueue(); // Inisialisasi antrian
+    S.top = 0;   // Inisialisasi stack
 
     char pilihMenu;
     int ulang = 1;
@@ -291,68 +235,74 @@ int main() {
         cout << "Input Menu  : ";
         cin >> pilihMenu;
         switch (pilihMenu) {
-            case '1':
-                cout << "\nMasukkan NIP \t\t= ";
-                cin >> nip;
-                cout << "Masukan Nama Karyawan \t= ";
-                cin >> namakrywn;
-                cout << "Masukan Tanggal Lahir \t= ";
-                cin >> tgl;
-                cout << "Masukan Telepon \t= ";
-                cin >> tlpon;
-                cout << "Masukan Agama \t\t= ";
-                cin >> agm;
-                cout << "Masukan Jabatan \t= ";
-                cin >> jbtn;
-                masukindatakaryawanbaru(nip, tgl, agm, namakrywn, tlpon, jbtn);
-                break;
+        case '1':
+            cout << "\nMasukkan NIP \t\t= ";
+            cin >> nip;
+            cout << "Masukan Nama Karyawan \t= ";
+            cin >> namakrywn;
+            cout << "Masukan Tanggal Lahir \t= ";
+            cin >> tgl;
+            cout << "Masukan Telepon \t= ";
+            cin >> tlpon;
+            cout << "Masukan Agama \t\t= ";
+            cin >> agm;
+            cout << "Masukan Jabatan \t= ";
+            cin >> jbtn;
+            masukindatakaryawanbaru(nip, tgl, agm, namakrywn, tlpon, jbtn);
+            break;
 
-            case '2':
-                tampil();
-                break;
+        case '2':
+            tampil();
+            break;
 
-            case '3':
-                cout << "\nMasukkan NIP Yang Dicari: ";
-                cin >> nip;
-                index = cariByNIP(nip);
-                if (index != -1) {
-                    cout << "DATA DITEMUKAN PADA INDEKS " << index << endl;
-                    cout << "NIP		: " << S.krywn[index].nip << endl;
-                    cout << "Nama Karyawan	: " << S.krywn[index].namakrywn << endl;
-                    cout << "Tanggal Lahir	: " << S.krywn[index].tgl << endl;
-                    cout << "Nomor Telepon	: " << S.krywn[index].tlpon << endl;
-                    cout << "Agama		: " << S.krywn[index].agm << endl;
-                    cout << "Jabatan		: " << S.krywn[index].jbtn << endl;
-                } else {
-                    cout << "DATA TIDAK DITEMUKAN\n";
-                }
-                break;
+        case '3':
+            cout << "\nMasukkan NIP Yang Dicari: ";
+            cin >> nip;
+            index = cariByNIP(nip);
+            if (index != -1) {
+                cout << "DATA DITEMUKAN PADA INDEKS " << index << endl;
+                cout << "NIP		: " << S.krywn[index].nip << endl;
+                cout << "Nama Karyawan	: " << S.krywn[index].namakrywn << endl;
+                cout << "Tanggal Lahir	: " << S.krywn[index].tgl << endl;
+                cout << "Nomor Telepon	: " << S.krywn[index].tlpon << endl;
+                cout << "Agama		: " << S.krywn[index].agm << endl;
+                cout << "Jabatan		: " << S.krywn[index].jbtn << endl;
+            } else {
+                cout << "DATA TIDAK DITEMUKAN\n";
+            }
+            break;
 
-            case '4':
-                cout << "\nMasukkan NIP \t\t= ";
-                cin >> nip;
-                cout << "Masukan Nama Karyawan \t= ";
-                cin >> namakrywn;
-                cout << "Masukan Tanggal Lahir \t= ";
-                cin >> tgl;
-                cout << "Masukan Telepon \t= ";
-                cin >> tlpon;
-                cout << "Masukan Agama \t\t= ";
-                cin >> agm;
-                cout << "Masukan Jabatan \t= ";
-                cin >> jbtn;
-                tambahDataKaryawanlama(nip, tgl, agm, namakrywn, tlpon, jbtn);
-                break;
+        case '4':
+            cout << "\nMasukkan NIP \t\t= ";
+            cin >> nip;
+            cout << "Masukan Nama Karyawan \t= ";
+            cin >> namakrywn;
+            cout << "Masukan Tanggal Lahir \t= ";
+            cin >> tgl;
+            cout << "Masukan Telepon \t= ";
+            cin >> tlpon;
+            cout << "Masukan Agama \t\t= ";
+            cin >> agm;
+            cout << "Masukan Jabatan \t= ";
+            cin >> jbtn;
+            tambahDataKaryawanlama(nip, tgl, agm, namakrywn, tlpon, jbtn);
+            break;
 
-            case '5':
-                tampilkanDataKaryawanlama();
-                break;
+        case '5':
+            tampilkanDataKaryawanlama();
+            break;
 
-            case '6':
-                cout << "\n\tTERIMA KASIH" << endl;
-                cout << "\n\tPROGRAM EXIT" << endl;  
-                ulang = 0;
-                break;
+        case '6':
+            cout << "\nMasukkan NIP yang akan dihapus: ";
+            cin >> nip;
+            hapusDataKaryawan(nip);
+            break;
+
+        case '7':
+            cout << "\n\tTERIMA KASIH" << endl;
+            cout << "\n\tPROGRAM EXIT" << endl;
+            ulang = 0;
+            break;
         }
     } while (ulang == 1);
 
